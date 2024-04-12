@@ -3,8 +3,14 @@
 
 
 import unittest
-from unittest.mock import patch
-from github_org_client import GithubOrgClient
+import requests
+from utils import access_nested_map, get_json, memoize
+from parameterized import parameterized
+from unittest.mock import Mock, patch, PropertyMock
+from utils import get_json
+from client import GithubOrgClient
+import client
+from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -23,6 +29,30 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get_json.assert_called_once()
         self.assertEqual(repos, test_payload)
 
+
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """ Test class for repos """
+
+    @classmethod
+    def setUpClass(cls):
+        """ class forGithubOrgClient"""
+        pass
+
+    def tearDownClass(self):
+        """ Teardown"""
+        pass
+
+    def test_public_repos_with_license(self):
+        """ Test method"""
+        pass
+
+    def test_public_repos(self):
+        """ Test method """
+        pass
+
+    def test_public_repos_with_license(self):
+        """ Test public"""
+        pass
 
 if __name__ == "__main__":
     unittest.main()
