@@ -29,6 +29,45 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get_json.assert_called_once()
         self.assertEqual(repos, test_payload)
 
+    @patch('github_org_client.GithubOrgClient.get_json')
+    def test_public_repos(self, mock_get_json):
+        # Define the test payload for public repos
+        test_payload = [{"name": "repo1"}, {"name": "repo2"}, {"name": "repo3"}]
+
+        # Mock the get_json method to return the test payload
+        mock_get_json.return_value = test_payload
+
+        # Create an instance of GithubOrgClient
+        client = GithubOrgClient("test_org")
+
+        # Call the public_repos method
+        repos = client.public_repos()
+
+        # Assertions
+        mock_get_json.assert_called_once()    # Check if get_json was called once
+        self.assertEqual(repos, test_payload) # Check if the returned repos match the test payload
+
+    @patch('github_org_client.GithubOrgClient.get_json')
+    def test_public_repos_with_license(self, mock_get_json):
+        # Define the test payload for public repos with license="apache-2.0"
+        test_payload = [{"name": "repo1", "license": {"spdx_id": "apache-2.0"}},
+                        {"name": "repo2", "license": {"spdx_id": "mit"}},
+                        {"name": "repo3", "license": {"spdx_id": "apache-2.0"}}]
+
+        # Mock the get_json method to return the test payload
+        mock_get_json.return_value = test_payload
+
+        # Create an instance of GithubOrgClient
+        client = GithubOrgClient("test_org")
+
+        # Call the public_repos method with license="apache-2.0"
+        repos_with_license = client.public_repos(license="apache-2.0")
+
+        # Assertions
+        mock_get_json.assert_called_once()            # Check if get_json was called once
+        expected_result = [repo for repo in test_payload if repo.get("license", {}).get("spdx_id") == "apache-2.0"]
+        self.assertEqual(repos_with_license, expected_result)
+
 
 class TestIntegrationGithubOrgClient(unittest.TestCase):
     """ Test class for repos """
